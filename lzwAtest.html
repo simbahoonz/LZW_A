@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="lzwidx.min.js"></script>
+    <script>
+        function dotest() {
+            let s = document.getElementById('src').value,
+                spredef = document.getElementById('predef').value.trim(),
+                predList = spredef ? spredef.split('\n') : undefined;
+
+            let t = new Date().getTime(),
+                i8ret = LZW_A.Compress(s, predList),
+                t2 = new Date().getTime(),
+                s2 = LZW_A.Uncompress(i8ret, predList),
+                t3 = new Date().getTime(),
+                report = [];
+
+            report.push('orig size (in char): '+s.length);
+            report.push('compressed size: '+i8ret.length);
+            report.push('compress time ms: '+(t2 - t));
+            report.push('uncompress time ms: '+(t3-t2));
+            report.push('orig===uncompressed? '+(s===s2));
+            document.getElementById('report').innerHTML = report.join('<br>');
+            document.getElementById('uncompressed').value = s2;
+        }
+    </script>
+</head>
+<body>
+    <div>
+    <textarea id="src" style="height: 60pt; width: 400pt;"></textarea><br>
+    <button onclick="dotest();">test</button>
+    <br>&nbsp;
+<div id="report" style="background-color: lightgray; height: 70pt;">
+
+</div>
+<br>
+
+    <textarea id="uncompressed" style="height: 60pt; width: 400pt;"></textarea>
+
+    </div>
+    <div style="position: fixed; right: 2pt; top: 5pt">
+        pre-defined list:<br>
+        <textarea id="predef" style="height: 300pt">let 
+const 
+new 
+function 
+return
+.subarray(
+case 
+else</textarea>
+    </div>
+</body>
+</html>
